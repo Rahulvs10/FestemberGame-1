@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -19,6 +20,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     float tempX;
     float tempY;
 
+    Bitmap round;
     public static double ballSpeed = 0;
 
     private UserBall userBall;
@@ -31,6 +33,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         thread = new MainThread(getHolder(), this);
         //make game panel focusable so it can handle events;
         setFocusable(true);
+        round = BitmapFactory.decodeResource(getResources(),R.drawable.round);
 
     }
 
@@ -65,7 +68,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                         if (user_x - tempX < 0.5) {
                             ballSpeed = -0.25;
                         } else if (user_x - tempX < 1) {
-                            ballSpeed = -0.5;
+                            ballSpeed = -0.75;
                         } else if (user_x - tempX < 2) {
                             ballSpeed = -1;
                         } else if (user_x - tempX < 2.5) {
@@ -88,7 +91,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                         if (tempX - user_x < 0.5) {
                             ballSpeed = 0.25;
                         } else if (tempX - user_x < 1) {
-                            ballSpeed = 0.5;
+                            ballSpeed = 0.75;
                         } else if (tempX - user_x < 2) {
                             ballSpeed = 1;
 
@@ -124,7 +127,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (thread.getState() == Thread.State.TERMINATED) {
             thread = new MainThread(getHolder(), this);
         }
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.gamebackground);
+        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.round);
         bg = new BackGround(bitmap, this);
         userBall = new UserBall(this);
         thread.setRunning(true);
