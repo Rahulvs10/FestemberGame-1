@@ -7,62 +7,56 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 
 public class BackGround {
     private GamePanel gamePanel;
+    private Tunnel tunnel, tunnel2, tunnel3;
     private int x = 0;
     private int y = 0;
     private int dx = 0;
-    private Bitmap bm;
-    int round_x, round_y, size, size2;
-    Rect src, dst, dst2;
+    private Bitmap bg;
+    int round_x, round_y;
+    RectF dst, dst2;
+    Rect src;
 
-    public BackGround(Bitmap bm, GamePanel gamePanel) {
+    public BackGround(Bitmap bm, Bitmap bg, GamePanel gamePanel) {
 
-        this.bm = bm;
+        this.bg = bg;
         this.gamePanel = gamePanel;
         dx = GamePanel.moveSpeed;
 
+
         round_x = gamePanel.getWidth() / 2;
         round_y = gamePanel.getHeight() / 2;
-        size = 0;
         src = new Rect(0, 0, bm.getWidth(), bm.getHeight());
-        dst = new Rect();
-        dst2 = new Rect();
+        dst = new RectF();
+        tunnel = new Tunnel(src, dst, round_x, round_y, bm);
+        tunnel2 = new Tunnel(src, dst, round_x, round_y, bm);
+        tunnel3 = new Tunnel(src, dst, round_x, round_y, bm);
+        dst2 = new RectF();
     }
 
 
     public void draw(Canvas canvas) {
         Paint back = new Paint();
-        back.setColor(Color.LTGRAY);
+        back.setColor(Color.BLACK);
 
         canvas.drawRect(0 , 0 ,gamePanel.getWidth() , gamePanel.getHeight() ,back );
+//
+//        canvas.drawBitmap(bg, x, y, null);
+//        if (y < 0) {
+//        canvas.drawBitmap(bg, x, y + gamePanel.getHeight(), null);
+//        }
 
-        //canvas.drawBitmap(bm, x, y, null);
-        //if (y < 0) {
-        //canvas.drawBitmap(bm, x, y + gamePanel.getHeight(), null);
-        //}
-        dst.left = round_x - size / 2;
-        dst.right = round_x + size / 2;
-        dst.top = round_y - size / 2;
-        dst.bottom = round_y + size / 2;
+        tunnel.draw(canvas);
 
-        size += 5;
-        canvas.drawBitmap(bm, src, dst, null);
-        if(size > 1000){
-            size = 0;
-        }
+        if(tunnel.next)
+            tunnel2.draw(canvas);
 
-        if (size > 500) {
-            size2 = size - 500;
-            dst2.left = round_x - size2 / 2;
-            dst2.right = round_x + size2 / 2;
-            dst2.top = round_y - size2 / 2;
-            dst2.bottom = round_y + size2 / 2;
-            canvas.drawBitmap(bm, src, dst2, null);
-        }
-
+        if (tunnel2.next)
+            tunnel3.draw(canvas);
     }
 
     public void update() {
@@ -71,9 +65,5 @@ public class BackGround {
         if (y < (-gamePanel.getHeight())) {
             y = 0;
         }
-
-
     }
-
-
 }

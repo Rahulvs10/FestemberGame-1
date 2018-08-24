@@ -43,8 +43,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         bg.draw(canvas);
         userBall.draw(canvas);
-
-
     }
 
     @Override
@@ -128,7 +126,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             thread = new MainThread(getHolder(), this);
         }
         Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.round);
-        bg = new BackGround(bitmap, this);
+        Bitmap bag = BitmapFactory.decodeResource(this.getResources(), R.drawable.gamebackground);
+        bg = new BackGround(bitmap, bag,this);
         userBall = new UserBall(this);
         thread.setRunning(true);
         thread.start();
